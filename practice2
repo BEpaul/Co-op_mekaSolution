@@ -1,6 +1,0 @@
-sentence = input()
-
-input_str = sentence.lower().split()
-str_sort = sorted(input_str, reverse=False)
-
-print(str_sort)

@@ -1,0 +1,10 @@
+{
+    "dev": {
+        "app_function": "simple_server.app",
+        "aws_region": "ap-northeast-2",
+        "profile_name": "default",
+        "project_name": "moapp",
+        "runtime": "python3.9",
+        "s3_bucket": "zappa-nf3l7yqs3"
+    }
+}
