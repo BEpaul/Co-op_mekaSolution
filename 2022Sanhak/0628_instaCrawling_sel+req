@@ -1,0 +1,95 @@
+from cgitb import html
+from ctypes import sizeof
+from selenium import webdriver
+from selenium.webdriver.common.by import By
+from bs4 import BeautifulSoup
+import pandas as pd
+import time
+from selenium.webdriver import ActionChains
+import requests
+
+## 01. 웹 열기
+driver = webdriver.Chrome() #웹드라이버로 크롬 웹 켜기
+driver.set_window_size(800, 1200) 	#브라우저 크기 800*1200으로 고정
+driver.get('https://www.instagram.com/') #인스타그램 웹 켜기
+time.sleep(3) 	#2초 대기
+
+## 02. 로그인
+#경로 지정
+id_box = driver.find_element_by_css_selector("#loginForm > div > div:nth-child(1) > div > label > input")   #아이디 입력창
+password_box = driver.find_element_by_css_selector("#loginForm > div > div:nth-child(2) > div > label > input")     #비밀번호 입력창
+login_button = driver.find_element_by_css_selector('#loginForm > div > div:nth-child(3) > button')      #로그인 버튼
+
+#동작 제어
+act = ActionChains(driver)      #동작 명령어 지정
+act.send_keys_to_element(id_box, 'rhrlwld@gmail.com').send_keys_to_element(password_box, 'rkdals!234').click(login_button).perform()     #아이디 입력, 비밀 번호 입력, 로그인 버튼 클릭 수행
+time.sleep(3)
+
+## 03. 해시태그 겁색
+hashword = str(input("해시태그를 입력하세요:"))
+hash_url = "http://instagram.com/explore/tags/" + str(hashword)
+driver.get(hash_url)
+time.sleep(3)
+
+## 게시물 클릭(또는 url 가져오기)
+html = driver.page_source
+soup = BeautifulSoup(html, 'html.parser')
+
+
+post = driver.find_elements(By.XPATH, '//*[@id="mount_0_0_KC"]/div/div[1]/div/div[1]/div/div/div[1]/div[1]/section/main/article/div[1]/div/div/div[1]/div[1]/a')
+print(post)
+print(len(post))
+
+print('=====================================')
+
+# Try here
+
+
+
+
+# class_name = driver.find_element_by_class_name("_aabd._aa8k._aanf")
+# a_tag = class_name.find_element_by_tag_name('a')
+# href_text = a_tag.get_attribute('href')
+
+# print(href_text)
+
+'''
+post2 = driver.find_elements(By.CSS_SELECTOR,value='._aabd._aa8k._aanf')
+print(post2)
+print(len(post2))
+
+print('=====================================')
+
+post3 = driver.find_elements(By.CSS_SELECTOR,'#mount_0_0_KC > div > div:nth-child(1) > div > div.rq0escxv.l9j0dhe7.du4w35lb > div > div > div.j83agx80.cbu4d94t.d6urw2fd.dp1hu0rb.l9j0dhe7.du4w35lb > div._a3gq._ab-1 > section > main > article > div._aaq8 > h2 > div')
+print(post3)
+print(len(post3))
+
+print('=====================================')
+'''
+
+
+# insta_url = "http://instagram.com/"
+
+# list_1 = driver.find_element_by_id('')
+
+# href = [a]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+## 해당 게시글(url)에 있는 정보 request 모듈을 통해 추출 (계정명, 좋아요 수, 댓글 수, 내용 등)
+
+
+
+
+driver.close()
