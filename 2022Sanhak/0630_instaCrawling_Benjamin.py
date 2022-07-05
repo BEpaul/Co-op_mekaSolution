@@ -1,6 +1,8 @@
 import requests
 from datetime import datetime
 import json
+import pandas as pd
+from sqlalchemy import false
 
 # 인스타그램의 API는 로그인 정보가 필요하므로
 # 먼저 로그인을 진행한 후 사용
@@ -65,7 +67,6 @@ class Instagram:
             }
         )
 
-        # return r.json()["data"]["top"]["sections"][0]["layout_content"]["medias"][0]["media"]
         return r.json()["data"]
 
     def get_top_search_tag(self, tag_name): # 인스타그램 검색창에 입력 시 실행되는 api, 추천 검색어를 반환함
@@ -85,13 +86,25 @@ class Instagram:
         return r.json()["hashtags"]
 
 
-username = "rhrlwld@gmail.com"
-password = "rkdals!234"
+username = "ID"
+password = "PW"
 
 instagram = Instagram()
 instagram.login(username, password)
 
+# 리스트 선언
+top_post_username = []
+top_post_like_count = []
+top_post_comment_count = []
 
+top_post = []
+recent_post = []
+
+recent_post_username = []
+recent_post_like_count = []
+recent_post_comment_count = []
+
+# 해시태그 검색
 tags = instagram.get_top_search_tag("#골프")
 
 ## 해시태그 추천 리스트
@@ -101,6 +114,7 @@ for tag in tags:
 print("")
 print("** 해당 해시태그의 인기 게시글 정보를 출력합니다. **")
 
+# 해시태그 검색
 hashtag_search = instagram.get_search_data_tag_name("골프웨어")
 
 ## 해시태그 검색 페이지에서 데이터 크롤링(인기 게시글)
@@ -108,41 +122,78 @@ for i in range(0, 3):
     for j in range(0, 3):
         
         #계정명
-        print("계정명 :", end= " ")
-        print(hashtag_search["top"]["sections"][i]["layout_content"]["medias"][j]["media"]["user"]["username"])
+        # top_post_username.append(hashtag_search["top"]["sections"][i]["layout_content"]["medias"][j]["media"]["user"]["username"])
+        # print("계정명 :", end= " ")
+        # print(hashtag_search["top"]["sections"][i]["layout_content"]["medias"][j]["media"]["user"]["username"])
 
         # 좋아요 수
-        print("좋아요 수 :", end= " ")
-        print(hashtag_search["top"]["sections"][i]["layout_content"]["medias"][j]["media"]["like_count"])
+        # top_post_like_count.append(hashtag_search["top"]["sections"][i]["layout_content"]["medias"][j]["media"]["like_count"])
+        # print("좋아요 수 :", end= " ")
+        # print(hashtag_search["top"]["sections"][i]["layout_content"]["medias"][j]["media"]["like_count"])
 
         # 댓글 수
-        print("댓글 수 :", end= " ")
-        print(hashtag_search["top"]["sections"][i]["layout_content"]["medias"][j]["media"]["comment_count"])
+        # top_post_comment_count.append(hashtag_search["top"]["sections"][i]["layout_content"]["medias"][j]["media"]["comment_count"])
+        # print("댓글 수 :", end= " ")
+        # print(hashtag_search["top"]["sections"][i]["layout_content"]["medias"][j]["media"]["comment_count"])
+
+
+        top_username = hashtag_search["top"]["sections"][i]["layout_content"]["medias"][j]["media"]["user"]["username"]
+        top_like = hashtag_search["top"]["sections"][i]["layout_content"]["medias"][j]["media"]["like_count"]
+        top_comments = hashtag_search["top"]["sections"][i]["layout_content"]["medias"][j]["media"]["comment_count"]
+        
+        top_post.append([top_username, top_like, top_comments])
+        
+        
+        print("i: " + str(i) + " j: " + str(j))
+        print('top_post_username: ')
+        print(top_post_username)
+        print("")
     
+
+    
+print("top_post의 값을 나타냅니다.")
+print(top_post)
 
 print("** 해당 해시태그의 최근 게시글 정보를 출력합니다. **")
 print("")
 ## 해시태그 검색 페이지에서 데이터 크롤링(최근 게시글)
-for i in range(0, 12):
+for i in range(0, 6):
     for j in range(0, 3):
         
+        # print("행 : " + i + " 열 : " + j)
         # 계정명
-        print("계정명 :", end= " ")
-        print(hashtag_search["recent"]["sections"][i]["layout_content"]["medias"][j]["media"]["user"]["username"])
+        # recent_post_username.append(hashtag_search["recent"]["sections"][i]["layout_content"]["medias"][j]["media"]["user"]["username"])
+        # print("계정명 :", end= " ")
+        # print(hashtag_search["recent"]["sections"][i]["layout_content"]["medias"][j]["media"]["user"]["username"])
         
         # 좋아요 수
-        print("좋아요 수 :", end= " ")
-        print(hashtag_search["recent"]["sections"][i]["layout_content"]["medias"][j]["media"]["like_count"])
+        # recent_post_like_count.append(hashtag_search["recent"]["sections"][i]["layout_content"]["medias"][j]["media"]["like_count"])
+        # print("좋아요 수 :", end= " ")
+        # print(hashtag_search["recent"]["sections"][i]["layout_content"]["medias"][j]["media"]["like_count"])
         
         # 댓글 수
-        print("댓글 수 :", end= " ")
-        print(hashtag_search["recent"]["sections"][i]["layout_content"]["medias"][j]["media"]["comment_count"])
+        # recent_post_comment_count.append(hashtag_search["recent"]["sections"][i]["layout_content"]["medias"][j]["media"]["comment_count"])
+        # print("댓글 수 :", end= " ")
+        # print(hashtag_search["recent"]["sections"][i]["layout_content"]["medias"][j]["media"]["comment_count"])
+    
+        recent_username = hashtag_search["recent"]["sections"][i]["layout_content"]["medias"][j]["media"]["user"]["username"]
+        recent_like = hashtag_search["recent"]["sections"][i]["layout_content"]["medias"][j]["media"]["like_count"]
+        recent_comments = hashtag_search["recent"]["sections"][i]["layout_content"]["medias"][j]["media"]["comment_count"]
         
-        print("")
-        print("열:", end=" ")
-        print(i)
-        print("")
+        recent_post.append(recent_username, recent_like, recent_comments)
+
         
-
-
 ## CSV 파일 저장
+output_top = pd.DataFrame(top_post, columns=['username', 'like', 'comments'])
+output_top.to_csv('top_post_9_v3.csv', index= False, encoding= 'cp949')
+
+output_recent = pd.DataFrame(recent_post, columns=['username', 'like', 'comments'])
+output_recent.to_csv('recent_post_18_v3.csv', index= False, encoding= 'cp949')
+
+''' 아론
+temp = pd.read_excel("data_tag_top.xlsx")
+temp.drop(['Unnamed: 0'], axis=3, inplace= True)
+
+tempy = pd.concat([temp, pd.DataFrame(csv_list_top, columns= ['username', 'like', 'comments'])])
+tempy.to_excel("data_tag_top.xlsx")
+'''
