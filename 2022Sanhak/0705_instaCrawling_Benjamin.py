@@ -99,8 +99,8 @@ class Instagram:
         
         return r.json()["data"]
 
-username = "ID" 
-password = "PW"
+username = "saalsgur@daum.net" 
+password = "rkdals!234"
 
 instagram = Instagram()
 instagram.login(username, password)
@@ -143,6 +143,7 @@ while True:
                 
                 top_user_like = 0
                 top_user_comments = 0
+                
                 
                 for k in range(0, 12):
                     temp_like = hashtag_top_user["user"]["edge_owner_to_timeline_media"]["edges"][k]["node"]["edge_liked_by"]["count"]
@@ -196,7 +197,7 @@ while True:
         print("----- recent post -----")
         print(recent_post)
         print("")
-        
+
 ## CSV 파일 저장
 '''
 부연설명
@@ -208,8 +209,15 @@ likeAvg : 해당 계정의 최근 12개 게시글에 대한 평균 좋아요 수
 commentsAvg : 해당 계정의 최근 12개 게시글에 대한 평균 댓글 수
 ER : 최근 12개 게시글에 대한 ER지수
 '''
+
 output_top = pd.DataFrame(top_post, columns=['hashtag', 'username', 'like', 'comments', 'follower', 'following', 'biography', 'likeAvg', 'commentsAvg', 'ER'])
 output_top.to_csv('top_post_9_v9.csv', index= False, encoding= 'utf-8')
 
 output_recent = pd.DataFrame(recent_post, columns=['hashtag','username', 'like', 'comments', 'follower', 'following', 'biography', 'likeAvg', 'commentsAvg', 'ER'])
 output_recent.to_csv('recent_post_18_v9.csv', index= False, encoding= 'utf-8')
+
+
+'''
+예외 발견사항 : 1. 해당계정의 게시글 수가 12개 미만인 경우 list error : out of range
+2. 팔로워 수가 0명인 경우 ER지수 계산에 있어서 분모가 0이 됨
+'''
