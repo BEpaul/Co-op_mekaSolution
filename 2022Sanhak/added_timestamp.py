@@ -317,7 +317,7 @@ for i in range(2):
 
         er_rate = (avg_like + avg_comment) / followers
         individual_info_list.append(er_rate)
-        individual_info_list.append(timestamp_list)
+        individual_info_list.append(tuple(timestamp_list))
 
         print(individual_info_list)
         account_info_list.append(individual_info_list)
@@ -332,5 +332,5 @@ df.insert(0, "account_id", insert_account_list, True)
 df.drop_duplicates(ignore_index=True, inplace=True)
 print(df)
 
-df.to_excel("패션test.xlsx")
+df.to_excel("패션1007.xlsx")
 
