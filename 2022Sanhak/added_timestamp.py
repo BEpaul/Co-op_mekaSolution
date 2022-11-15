@@ -18,7 +18,7 @@ import os
 # 초기 검색 해시태그
 # searching_tag_list = ["#골프웨어", "#캠핑", "#요리", "#화장품", "#공구", "#광고", "#협찬", "#골프", "#뷰티", "#육아", "#맛집", "#육아", "#요리", "#데일리룩", "#ootd", "#운동", "#직장인", "#다이어트", "#테니스", "#라이딩", "#댕댕이", "#화장품", "#산책", "#발색", "#카페", "#분위기", "#일상", "#오늘", "#여친", "#남친", "#커플", "#데이트", "#가족", "#먹방", "#서울", "#호캉스", "#아이폰", "#차박", "#자동차", "#호텔", "#책", "#영화", "#주방"]
 #searching_tag_list = ["여행", "캠핑", "골프", "음식"]
-searching_tag_list = ["패션"]
+searching_tag_list = ["요리"]
 
 # searching_tag_list = ["캠핑", "캠핑용품", "캠핑요리"]
 # 초기 검색 해시태그로부터 얻는 추천 해시태그
@@ -51,8 +51,9 @@ class Instagram:
         self.sess = None  # 로그인 유지를 위해 requests의 session 클래스를 사용
 
     def login(self, username, password):  # 인스타그램 로그인
-        link = 'https://www.instagram.com/accounts/login/'
-        login_url = 'https://www.instagram.com/accounts/login/ajax/'
+        link = 'https://www.instagram.com/api/v1/web/accounts/login/ajax/'
+        # login_url = 'https://www.instagram.com/accounts/login/ajax/'
+        login_url = 'https://www.instagram.com/api/v1/web/accounts/login/ajax/'
 
         self.sess = requests.session()
 
@@ -148,8 +149,8 @@ class Instagram:
 
 
 
-username = ""
-password = ""
+username = "aalsgur@yandex.com"
+password = "rkdals!234"
 
 instagram = Instagram()
 instagram.login(username, password)
@@ -250,11 +251,10 @@ for recommend_tag in tqdm(searching_tag_list, desc="getting usernames"):
 print(account_list)
 
 # 계정명 리스트로 계정정보 리스트 생성
-# for account in tqdm(account_list, desc="getting userinfo"):
+for account in tqdm(account_list, desc="getting userinfo"):
 
-for i in range(2):
 # for i in range(10):
-    account = account_list[i]
+    # account = account_list[i]
     try:
         time.sleep(30)
         individual_info_list = []
@@ -332,5 +332,5 @@ df.insert(0, "account_id", insert_account_list, True)
 df.drop_duplicates(ignore_index=True, inplace=True)
 print(df)
 
-df.to_excel("패션1007.xlsx")
+df.to_excel("요리1111.xlsx")
 
