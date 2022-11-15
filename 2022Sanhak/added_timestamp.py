@@ -149,8 +149,8 @@ class Instagram:
 
 
 
-username = "aalsgur@yandex.com"
-password = "rkdals!234"
+username = ""
+password = ""
 
 instagram = Instagram()
 instagram.login(username, password)
